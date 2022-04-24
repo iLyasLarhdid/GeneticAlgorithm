@@ -116,4 +116,39 @@ public class GeneticAlgorithm {
     }
 
 
+
+    public Population mutatePopulation(Population population) {
+        // Initialize new population
+        Population newPopulation = new Population(this.populationSize);
+
+        // Loop over current population by fitness
+        for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
+            Individual individual = population.getFittest(populationIndex);
+
+            // Loop over individual's genes
+            for (int geneIndex = 0; geneIndex < individual.getChromosomeLength(); geneIndex++) {
+                // Skip mutation if this is an elite individual
+                if (populationIndex > this.elitismCount) {
+                    // Does this gene need mutation?
+                    if (this.mutationRate > Math.random()) {
+                        // Get new gene
+                        int newGene = 1;
+                        if (individual.getGene(geneIndex) == 1) {
+                            newGene = 0;
+                        }
+                        // Mutate gene
+                        individual.setGene(geneIndex, newGene);
+                    }
+                }
+            }
+
+            // Add individual to population
+            newPopulation.setIndividual(populationIndex, individual);
+        }
+
+        // Return mutated population
+        return newPopulation;
+    }
+
+
 }
